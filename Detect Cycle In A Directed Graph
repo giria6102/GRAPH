@@ -1,3 +1,5 @@
+
+time complexity is linear(nodes +edges) and space complexity is also linear
 bool isCycleDFS(int node,unordered_map<int,bool>&visited, unordered_map<int,bool>&dfsVisited, unordered_map<int,list<int>>&adj){
   visited[node] = true;
   dfsVisited[node] = true;
