@@ -1,0 +1,78 @@
+int min(int a,int b){
+    if(a<b){
+        return b;
+    }
+    else{
+        return b;
+    }
+}
+void dfs(int node,int& parent,vector<int>&low,vector<int>&disc,unordered_map<int,bool>&visi,unordered_map<int,list<int>>&adj,vector<int>&ap,int &timer){
+    visi[node]=true;
+    low[node]=disc[node]=timer++;
+    int child=0;
+    for(auto nbr:adj[node]){
+        if(parent==nbr){
+            continue;
+        }
+        else if(!visi[nbr]){
+            dfs(nbr,node,low,disc,visi,adj,ap,timer);
+            low[node]=min(low[node],low[nbr]);
+            if(low[nbr]>=disc[node]&&parent!=-1){
+                ap[node]=1;
+            }
+            child++;
+        }
+        else{
+            low[node]=min(low[node],disc[nbr]);
+        }
+    }
+    if(parent==-1&&child>1){
+        ap[node]=1;
+    }
+}
+
+int main()
+{
+    int n=5;
+    int e=5;
+    vector<pair<int,int>>edges;
+    edges.push_back({0,3});
+    edges.push_back({3,4});
+    edges.push_back({0,4});
+    edges.push_back({0,1});
+    edges.push_back({1,2});
+    
+    unordered_map<int,list<int>>adj;
+    
+    for(int i=0;i<edges.size();i++){
+        int u=edges[i].first;
+        int v=edges[i].second;
+        
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    int timer=0;
+    vector<int>low(n);
+    vector<int>disc(n);
+    int parent=-1;
+    vector<int>ap(n,0);
+    unordered_map<int,bool>visi;
+    
+    for(int i=0;i<n;i++){
+        low[i]=-1;
+        disc[i]=-1;
+    }
+    
+    for(int i=0;i<n;i++){
+        if(!visi[i]){
+            dfs(i,parent,low,disc,visi,adj,ap,timer);
+        }
+    }
+    //print articulation points
+    for(int i=0;i<n;i++){
+        if(ap[i]!=0){
+            cout<<i<<" ";
+        }
+    }cout<<endl;
+    return 0;
+}
